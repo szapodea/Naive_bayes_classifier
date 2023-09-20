@@ -7,8 +7,10 @@ def pre_process(file):
     data = pd.read_csv(file)
     data = replace_quotes(data=data)
     data = to_lowercase(data=data)
-    data.to_csv('./after_lowercase.csv')
     data = numeric_values(data=data)
+    data = normalize_cols(data=data)
+    print_means(data=data)
+    data.to_csv('./dating.csv')
 
 # function that strips single quotes (') of three dimensions of the data set.
 # also counts and outputs the number of datapoints that have quotes replaced
@@ -98,8 +100,48 @@ def numeric_values(data):
     print('Value assigned for European/Caucasian-American in column race: {0}.'.format(race_dict['European/Caucasian-American']))
     print('Value assigned for Latino/Hispanic American in column race_o: {0}.'.format(raceo_dict['Latino/Hispanic American']))
     print('Value assigned for law in column field: {0}'.format(field_dict['law']))
-    
+
     return data
+
+# function that normalizes the values in the following columns with each other:
+# [attractive_important, sincere_important, intelligence_important, funny_important,
+#  ambition_important, shared_interests_important]
+# Function also normalizes the values in the following columns with each other:
+# ["pref_o_attractive", "pref_o_sincere", "pref_o_intelligence", "pref_o_funny",
+#  "pref_o_ambitious", "pref_o_shared_interests"]
+def normalize_cols(data):
+
+    participant_cols = ["attractive_important", "sincere_important", "intelligence_important",
+            "funny_important", "ambition_important", "shared_interests_important"]
+
+    partner_cols = ["pref_o_attractive", "pref_o_sincere", "pref_o_intelligence", "pref_o_funny",
+            "pref_o_ambitious", "pref_o_shared_interests"]
+    i = 0
+    for index, row in data.iterrows():
+        participant_total = 0
+        partner_total = 0
+        for col in participant_cols:
+            participant_total += row[col]
+        for col in partner_cols:
+            partner_total += row[col]
+
+        for col in participant_cols:
+            data.at[i, col] = row[col] / participant_total
+        for col in partner_cols:
+            data.at[i, col] = row[col] / partner_total
+        i += 1
+    return data
+
+# Function that prints the means of the columns normalized above
+def print_means(data):
+    cols = ["attractive_important", "sincere_important", "intelligence_important",
+            "funny_important", "ambition_important", "shared_interests_important",
+            "pref_o_attractive", "pref_o_sincere", "pref_o_intelligence", "pref_o_funny",
+            "pref_o_ambitious", "pref_o_shared_interests"]
+
+    for col in cols:
+        print("Mean of {0}: {1:.2f}.".format(col, np.mean(data[col])))
+
 
 
 
