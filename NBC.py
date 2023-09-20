@@ -3,43 +3,39 @@ import pandas as pd
 import scipy as sc
 
 
-
-
 def pre_process(file):
-    columns = ['gender', 'age', 'age_o', 'race', 'race_o', 'samerace', 'importance_same_race',
-                   'importance_same_religion', 'field', 'pref_o_attractive', 'pref_o_sincere',
-                   'pref_o_intelligence', 'pref_o_funny', 'pref_o_ambitious', 'pref_o_shared_interests',
-                   'attractive_important', 'sincere_important', 'intelligence_important', 'funny_important',
-                   'ambition_important', 'shared_interests_important', 'attractive', 'sincere', 'intelligence',
-                   'funny', 'ambition', 'attractive_partner', 'sincere_partner', 'intelligence_parter', 'funny_partner',
-                   'ambition_partner', 'shared_interests_partner', 'sports', 'tvsports', 'exercise', 'dining', 'museums',
-                   'art', 'hiking', 'gaming', 'clubbing', 'reading', 'tv', 'theater', 'movies', 'concerts', 'music',
-                   'shopping', 'yoga', 'interests_correlate', 'expected_happy_with_sd_people', 'like', 'decision']
-    data = pd.read_csv(file, usecols=columns)
+    data = pd.read_csv(file)
     data = replace_quotes(data=data)
+    data = to_lowercase(data=data)
 
 # function that strips single quotes (') of three dimensions of the data set.
-# also counts the number of datapoints that have quotes replaced and prints them
+# also counts and outputs the number of datapoints that have quotes replaced
 def replace_quotes(data):
     replace_cnt = 0
-    for i in range(len(data['race'])):
-        if '\'' in data['race'][i]:
-            data['race'][i] = data['race'][i].replace('\'', '')
+    for i in range(len(data.loc[:, 'race'])):
+        if '\'' in data.loc[:, 'race'][i]:
             replace_cnt += 1
-
-    for row in data['race_o']:
-        if '\'' in row:
-            row = row.replace('\'', '')
+        if '\'' in data.loc[:, 'race_o'][i]:
             replace_cnt += 1
-    for row in data['field']:
-        if '\'' in row:
-            row = row.replace('\'', '')
+        if '\'' in data.loc[:, 'field'][i]:
             replace_cnt += 1
 
     print("Quotes removed from {0} cells.".format(replace_cnt))
-    print(data['race'])
-    print(data['race_o'])
-    print(data['field'])
+    data['race'] = data['race'].str.replace('\'', '')
+    data['race_o'] = data['race_o'].str.replace('\'', '')
+    data['field'] = data['field'].str.replace('\'', '')
+    return data
+
+# function that sets all characters in field dimension to lowercase
+# also counts and outputs the number of datapoints set to lowercase
+def to_lowercase(data):
+    lower_data = data['field'].str.lower()
+    lower_cnt = 0
+    for (lower, row) in zip(lower_data, data['field']):
+        if lower != row:
+            lower_cnt += 1
+    print("Standardized {0} cells to lower case.".format(lower_cnt))
+    data['field'] = lower_data
 
     return data
 
