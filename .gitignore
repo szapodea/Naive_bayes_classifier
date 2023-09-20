@@ -6,7 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
-dating-full.csv
+# CSV extensions
+*.csv
 
 # Distribution / packaging
 .Python
