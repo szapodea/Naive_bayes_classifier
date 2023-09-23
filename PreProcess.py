@@ -9,7 +9,7 @@ def pre_process(file):
     data = numeric_values(data=data)
     data = normalize_cols(data=data)
     print_means(data=data)
-    data.to_csv('./dating.csv')
+    data.to_csv('./dating.csv') #potentially could do index=False
 
 # function that strips single quotes (') of three dimensions of the data set.
 # also counts and outputs the number of datapoints that have quotes replaced

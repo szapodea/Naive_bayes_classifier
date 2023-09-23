@@ -93,5 +93,5 @@ def scatter_plots(data):
 
 if __name__ == '__main__':
     data = pd.read_csv('./dating.csv')
-    #visualize_gender(data=data)
+    visualize_gender(data=data)
     scatter_plots(data=data)
