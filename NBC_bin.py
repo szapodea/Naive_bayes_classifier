@@ -1,3 +1,4 @@
+import Bin
 import pandas as pd
 import numpy as np
 
@@ -18,7 +19,6 @@ class NBC:
         class_probs = self.classProbs(trainingData)
 
         probs_dict = self.getLabelProbs(training_data=trainingData, class_probs=class_probs, overall_data=binned_data)
-        print(probs_dict['samerace'])
         percentage = self.predict_decisions(data=trainingData, probs=probs_dict, class_probs=class_probs)
         print(percentage)
         testData = pd.read_csv('./testSet.csv')
@@ -108,5 +108,13 @@ class NBC:
 
 
 if __name__ == '__main__':
+    bins = [2, 5, 10, 50, 100, 200]
+    data = pd.read_csv('./dating.csv')
+    for bin in bins:
+        Bin.into_bins(data=data, bins = bin, file_name='./dating-binned-2.csv')
+        data_binned = pd.read_csv('./dating-binned-2.csv')
+        Bin.split(data=data_binned, test_file='./testSet-binned.csv', training_file='./trainingSet-binned.csv')
+
+
     classifier = NBC(t_frac=1, laplace=1)
     classifier.nbc(t_frac=classifier.t_frac)
