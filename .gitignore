@@ -9,6 +9,9 @@ __pycache__/
 # CSV extensions
 *.csv
 
+# Jupyter Notebooks
+*.ipynb
+
 # Distribution / packaging
 .Python
 build/

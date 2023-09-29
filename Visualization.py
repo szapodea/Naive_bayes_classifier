@@ -35,27 +35,13 @@ def visualize_gender(data):
 
 
 def scatter_plots(data):
-    cols = ['attractive_partner', 'sincere_partner', 'intelligence_partner',
+    cols = ['attractive_partner', 'sincere_partner', 'intelligence_parter',
             'funny_partner', 'ambition_partner', 'shared_interests_partner']
 
     distinct_vals = {}
 
     for col in cols:
         distinct_vals[col] = data[col].unique()
-    '''
-    print(distinct_vals['attractive_partner'])
-
-    matching = data.loc[data['attractive_partner'] == 0]
-    yes = matching['decision'].value_counts()
-    print(dict(yes))
-    yes = dict(yes)
-    if 1 not in yes.keys():
-        print(0)
-    elif 1 not in yes.keys():
-        print(1)
-    else:
-        print(yes[1]/(yes[0] + yes[1]))
-    '''
 
     second_date_percent = []
     for col in cols:
@@ -78,7 +64,6 @@ def scatter_plots(data):
         #print(second_date_percent[col].keys())
         x = second_date_percent[col].keys()
         y = second_date_percent[col].values()
-        print(x, y)
         plt.figure(cols[col])
         plt.scatter(x, y)
         plt.xlabel('{0} Rating'.format(cols[col]))
